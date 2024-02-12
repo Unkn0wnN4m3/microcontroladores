@@ -4,3 +4,5 @@
 
 - Julio Cesar Lopez Rodriguez
 - Aaron Cruz San Juan
+- Meneses Rodriguez Javier
+  
