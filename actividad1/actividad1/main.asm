@@ -7,6 +7,9 @@
 
 
 ; Replace with your application code
+.def counter=r18
+.def repeat=r19
+
 .cseg
 .org 0x00
 
@@ -24,9 +27,48 @@
         cbi DDRB, PB1 ; 0
 
         ; WARN: must be the builtin LED
-        sbi DDRB, PB2 ; 1
+        sbi DDRB, PB5 ; 1
 
-        ; TCNT timer/counter
-        ; 
+        ; Activate pull-ups
+        sbi PORTB, PB0
+        sbi PORTB, PB1
+
+        ;init stack
+        ldi r16, high(RAMEND)
+        out SPH, r16
+        ldi r16, low(RAMEND)
+        out SPH, r16
 
 start:
+        sbi PORTB, PB5
+        rcall delay
+        cbi PORTB, PB5
+        rcall delay
+        rjmp start
+
+delay:
+        ; starting counter with 0
+        ldi counter, 0
+        out TCNT0, counter
+
+        ; starting repetitions with 0
+        ldi repeat, 0
+
+cycle:
+        ; read from counter
+        in counter, TCNT0
+
+        ; 250 max counter
+        cpi counter, 250
+        brne cycle
+
+        ; init counter with 0
+        ldi counter, 0
+        out TCNT0, counter
+
+        ; repeat n times
+        inc repeat
+        cpi repeat, 12
+        brne cycle
+        ret
+
