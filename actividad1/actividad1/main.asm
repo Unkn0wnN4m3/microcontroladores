@@ -70,5 +70,8 @@ cycle:
         inc repeat
         cpi repeat, 12
         brne cycle
+
+
+
         ret
 
