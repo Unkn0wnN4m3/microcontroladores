@@ -113,7 +113,7 @@ loop1:
         brne loop1
         ldi counter1,0
         out TCNT0,counter1
-        inc repeat1
+        inc 
         cpi repeat1,25
         brne loop1
         ret
