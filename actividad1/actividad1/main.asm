@@ -10,10 +10,18 @@
 ;
 
 .include "./m328Pdef.inc"
-.equ Value = 0xc2f7
+.def counter = r17
+.def repeat = r18
+.def temp = r16
 
 .cseg
 .org 0x00
+
+        ;init stack
+        ldi temp,high(RAMEND)
+        out SPH,temp
+        ldi temp,low(RAMEND)
+        out SPL,temp
 
         ; Define the ports
         ; Making b0 = in, b1 = in and b2 = out
@@ -35,9 +43,12 @@
         sbi PORTB, PB0
         sbi PORTB, PB1
 
+        ldi temp, 0x05
+        out TCCR0B, temp
+;
 selection:
         in r16, PINB
-        cpi r16, 0b00000011
+        cpi r16, 0x03
         breq Start
         rjmp selection
 
@@ -49,23 +60,16 @@ Start:
         rjmp selection
 
 Delay:
-        ; set up timer counter to Value
-        ldi r30, high(Value)
-        sts TCNT1H, r30
-        ldi r30, low(Value)
-        sts TCNT1L, r30
-
-        ; set normal mode
-        ldi r31, 0x00 
-        sts TCCR1A, r31
-        ldi r31, 0x05  ; 1024 prescaler
-        sts TCCR1B, r31
-
-Loop:
-        sbis TIFR1, TOV1  ; skip if TOV1 = 1
-        rjmp Loop
-        sbi TIFR1, TOV1  ; Clear TOV1 writing 1
-        ; stop timer1
-        ldi r30, 0xFF
-        sts TCCR1B, r30
+        ldi counter,0
+        out TCNT0,counter
+        ldi repeat,0;
+loop:
+        in counter,TCNT0
+        cpi counter,250
+        brne loop
+        ldi counter,0
+        out TCNT0,counter
+        inc repeat
+        cpi repeat,62
+        brne loop
         ret
