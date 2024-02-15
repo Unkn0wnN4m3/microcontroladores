@@ -73,7 +73,7 @@ selection:
 ; 1hz
 ; (15625 * 1) / 250
 Start:
-        sbi 
+        sbi PORTB, PB5
         call Delay
         cbi PORTB, PB5
         call Delay
