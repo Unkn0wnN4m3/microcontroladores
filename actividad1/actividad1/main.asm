@@ -12,6 +12,8 @@
 .include "./m328Pdef.inc"
 .def counter = r17
 .def repeat = r18
+.def counter1 = r19
+.def repeat1 = r20
 .def temp = r16
 
 .cseg
@@ -48,8 +50,12 @@
 ;
 selection:
         in r16, PINB
-        cpi r16, 0x03
+        cpi r16, 0x00
         breq Start
+
+        in r16, PINB
+        cpi r16, 0x01
+        breq Start1
         rjmp selection
 
 Start:
@@ -72,4 +78,26 @@ loop:
         inc repeat
         cpi repeat,62
         brne loop
+        ret
+
+Start1:
+        sbi PORTB, PB5
+        call Delay1
+        cbi PORTB, PB5
+        call Delay1
+        rjmp selection
+
+Delay1:
+        ldi counter1,0
+        out TCNT0,counter1
+        ldi repeat1,0;
+loop1:
+        in counter1,TCNT0
+        cpi counter1,250
+        brne loop1
+        ldi counter1,0
+        out TCNT0,counter1
+        inc repeat1
+        cpi repeat1,120
+        brne loop1
         ret
