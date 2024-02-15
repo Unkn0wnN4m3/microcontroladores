@@ -157,7 +157,7 @@ Delay3:
         ldi repeat3,0;
 loop3:
         in counter3,TCNT0
-        cpi counter3,25
+        cpi counter3,250
         brne loop3
         ldi counter3,0
         out TCNT0,counter3
