@@ -17,7 +17,7 @@
         cbi DDRB, PB0 ; 0
         cbi DDRB, PB1 ; 0
 
-        ; WARN: must be the builtin LED
+        ; builtin LED
         sbi DDRB, PB5 ; 1
 
         ; Activate pull-ups
@@ -36,7 +36,7 @@ Delay:
         ldi r30, high(Value)
         sts TCNT1H, r30
         ldi r30, low(Value)
-        sts TCNt1L, r30
+        sts TCNT1L, r30
 
         ; set normal mode
         ldi r31, 0x00 
