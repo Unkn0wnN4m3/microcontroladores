@@ -14,6 +14,10 @@
 .def repeat = r18
 .def counter1 = r19
 .def repeat1 = r20
+.def counter2 = r21
+.def repeat2 = r22
+.def counter3 = r23
+.def repeat3 = r24
 .def temp = r16
 
 .cseg
@@ -56,8 +60,18 @@ selection:
         in r16, PINB
         cpi r16, 0x01
         breq Start1
+
+        in r16, PINB
+        cpi r16, 0x02
+        breq Start2
+
+        in r16, PINB
+        cpi r16, 0x03
+        breq Start3
         rjmp selection
 
+; 1hz
+; (15625 * 1) / 250
 Start:
         sbi PORTB, PB5
         call Delay
@@ -80,6 +94,8 @@ loop:
         brne loop
         ret
 
+; 2.5hz
+; (15625 * 0.4) / 250
 Start1:
         sbi PORTB, PB5
         call Delay1
@@ -98,6 +114,54 @@ loop1:
         ldi counter1,0
         out TCNT0,counter1
         inc repeat1
-        cpi repeat1,120
+        cpi repeat1,25
         brne loop1
+        ret
+
+; 50hz
+; (15625 * 0.02) / 250
+Start2:
+        sbi PORTB, PB5
+        call Delay2
+        cbi PORTB, PB5
+        call Delay2
+        rjmp selection
+
+Delay2:
+        ldi counter2,0
+        out TCNT0,counter2
+        ldi repeat2,0;
+loop2:
+        in counter2,TCNT0
+        cpi counter2,250
+        brne loop2
+        ldi counter2,0
+        out TCNT0,counter2
+        inc repeat2
+        cpi repeat2,2
+        brne loop2
+        ret
+
+; 10khz
+; (15625 * 0.0001) / 250
+Start3:
+        sbi PORTB, PB5
+        call Delay3
+        cbi PORTB, PB5
+        call Delay3
+        rjmp selection
+
+Delay3:
+        ldi counter3,0
+        out TCNT0,counter3
+        ldi repeat3,0;
+loop3:
+        in counter3,TCNT0
+        cpi counter3,250
+        brne loop3
+        ldi counter3,0
+        out TCNT0,counter3
+        inc repeat3
+        cpi repeat3,1
+        brne loop3
         ret
