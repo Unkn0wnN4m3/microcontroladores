@@ -49,22 +49,22 @@ start:
 delay:
         ; starting counter with 0
         ldi counter, 0
-        out TCNT0, counter
+        out TCNT1, counter
 
         ; starting repetitions with 0
         ldi repeat, 0
 
 cycle:
         ; read from counter
-        in counter, TCNT0
+        in counter, TCNT1
 
-        ; 250 max counter
-        cpi counter, 250
+        ; 65535 max counter
+        cpi counter, 
         brne cycle
 
         ; init counter with 0
         ldi counter, 0
-        out TCNT0, counter
+        out TCNT1, counter
 
         ; repeat n times
         inc repeat
