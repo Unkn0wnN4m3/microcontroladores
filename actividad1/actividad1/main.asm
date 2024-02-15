@@ -1,14 +1,5 @@
-;
-; actividad1.asm
-;
-; Created: 10/02/2024 20:28:09
-; Author : unk0wnn4m3
-;
-
-
-; Replace with your application code
-.def counter=r18
-.def repeat=r19
+.include "./m328Pdef.inc"
+.equ Value = 0xc2f7
 
 .cseg
 .org 0x00
@@ -33,45 +24,31 @@
         sbi PORTB, PB0
         sbi PORTB, PB1
 
-        ;init stack
-        ldi r16, high(RAMEND)
-        out SPH, r16
-        ldi r16, low(RAMEND)
-        out SPH, r16
-
-start:
+Start:
         sbi PORTB, PB5
-        rcall delay
+        call Delay
         cbi PORTB, PB5
-        rcall delay
-        rjmp start
+        call Delay
+        rjmp Start
 
-delay:
-        ; starting counter with 0
-        ldi counter, 0
-        out TCNT1, counter
+Delay:
+        ; set up timer counter to Value
+        ldi r30, high(Value)
+        sts TCNT1H, r30
+        ldi r30, low(Value)
+        sts TCNt1L, r30
 
-        ; starting repetitions with 0
-        ldi repeat, 0
+        ; set normal mode
+        ldi r31, 0x00 
+        sts TCCR1A, r31
+        ldi r31, 0x05  ; 1024 prescaler
+        sts TCCR1B, r31
 
-cycle:
-        ; read from counter
-        in counter, TCNT1
-
-        ; 65535 max counter
-        cpi counter, 
-        brne cycle
-
-        ; init counter with 0
-        ldi counter, 0
-        out TCNT1, counter
-
-        ; repeat n times
-        inc repeat
-        cpi repeat, 12
-        brne cycle
-
-
-
+Loop:
+        sbis TIFR1, TOV1  ; skip if TOV1 = 1
+        rjmp Loop
+        sbi TIFR1, TOV1  ; Clear TOV1 writing 1
+        ; stop timer1
+        ldi r30, 0xFF
+        sts TCCR1B, r30
         ret
-
