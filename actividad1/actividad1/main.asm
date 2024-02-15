@@ -35,12 +35,18 @@
         sbi PORTB, PB0
         sbi PORTB, PB1
 
+selection:
+        in r16, PINB
+        cpi r16, 0b00000011
+        breq Start
+        rjmp selection
+
 Start:
         sbi PORTB, PB5
         call Delay
         cbi PORTB, PB5
         call Delay
-        rjmp Start
+        rjmp selection
 
 Delay:
         ; set up timer counter to Value
