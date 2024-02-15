@@ -1,4 +1,4 @@
-;
+8;
 ;
 ; ████████╗██╗███╗   ███╗███████╗██████╗ 
 ; ╚══██╔══╝██║████╗ ████║██╔════╝██╔══██╗
@@ -143,7 +143,7 @@ loop2:
         ret
 
 ; 10khz
-; (15625 * 0.0001) / 250
+; (15625* 0.0001) / 250
 Start3:
         sbi PORTB, PB5
         call Delay3
@@ -157,7 +157,7 @@ Delay3:
         ldi repeat3,0;
 loop3:
         in counter3,TCNT0
-        cpi counter3,250
+        cpi counter3,25
         brne loop3
         ldi counter3,0
         out TCNT0,counter3
