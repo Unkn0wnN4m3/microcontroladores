@@ -12,12 +12,6 @@
 .include "./m328Pdef.inc"
 .def counter = r17
 .def repeat = r18
-.def counter1 = r19
-.def repeat1 = r20
-.def counter2 = r21
-.def repeat2 = r22
-.def counter3 = r23
-.def repeat3 = r24
 .def temp = r16
 
 .cseg
@@ -104,17 +98,17 @@ Start1:
         rjmp selection
 
 Delay1:
-        ldi counter1,0
-        out TCNT0,counter1
-        ldi repeat1,0;
+        ldi counter,0
+        out TCNT0,counter
+        ldi repeat,0;
 loop1:
-        in counter1,TCNT0
-        cpi counter1,250
+        in counter,TCNT0
+        cpi counter,250
         brne loop1
-        ldi counter1,0
-        out TCNT0,counter1
-        inc repeat1
-        cpi repeat1,25
+        ldi counter,0
+        out TCNT0,counter
+        inc repeat
+        cpi repeat,25
         brne loop1
         ret
 
@@ -128,17 +122,17 @@ Start2:
         rjmp selection
 
 Delay2:
-        ldi counter2,0
-        out TCNT0,counter2
-        ldi repeat2,0;
+        ldi counter,0
+        out TCNT0,counter
+        ldi repeat,0;
 loop2:
-        in counter2,TCNT0
-        cpi counter2,250
+        in counter,TCNT0
+        cpi counter,250
         brne loop2
-        ldi counter2,0
-        out TCNT0,counter2
-        inc repeat2
-        cpi repeat2,2
+        ldi counter,0
+        out TCNT0,counter
+        inc repeat
+        cpi repeat,2
         brne loop2
         ret
 
@@ -152,16 +146,16 @@ Start3:
         rjmp selection
 
 Delay3:
-        ldi counter3,0
-        out TCNT0,counter3
-        ldi repeat3,0;
+        ldi counter,0
+        out TCNT0,counter
+        ldi repeat,0;
 loop3:
-        in counter3,TCNT0
-        cpi counter3,250
+        in counter,TCNT0
+        cpi counter,250
         brne loop3
-        ldi counter3,0
-        out TCNT0,counter3
-        inc repeat3
-        cpi repeat3,1
+        ldi counter,0
+        out TCNT0,counter
+        inc repeat
+        cpi repeat,1
         brne loop3
         ret
