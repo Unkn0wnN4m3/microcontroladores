@@ -12,6 +12,9 @@
 .include "./m328Pdef.inc"
 .def temp = r16
 .equ Value = 0xE17B
+.equ Value1 = 0xF3CB
+.equ Value2 = 0xFF64
+.equ Value3 = 0xFFFD
 
 .cseg
 .org 0x00
@@ -96,6 +99,7 @@ Loop:   Sbis TIFR1, TOV1        ;If TOV1=1, skip next instruction
         sts TCCR1B, r30         ;Stop timer1
         Ret
 
+; 2.6hz
 Start1:
         sbi PORTB, PB5
         call Delay1
@@ -104,22 +108,23 @@ Start1:
         rjmp selection
 
 Delay1:
-        ldi counter,0
-        out TCNT0,counter
-        ldi repeat,0;
-loop1:
-        in counter,TCNT0
-        cpi counter,250
-        brne loop1
-        ldi counter,0
-        out TCNT0,counter
-        inc repeat
-        cpi repeat,25
-        brne loop1
-        ret
+        ldi r30, High(Value1)
+        sts TCNT1H, r30
+        ldi r30, Low(Value1)
+        sts TCNT1L, r30         ;Setup Timer Counter TCNT1 = Value
+        ldi r31, 0x00           ;0b00000000 - normal mode
+        sts TCCR1A, r31
+        ldi r31, 0x04           ;0b00000101, prescaler = 1024
+        sts TCCR1B, r31         ;Timer will start counting after this
+                                                        ;instruction is executed.
+Loop1:   Sbis TIFR1, TOV1        ;If TOV1=1, skip next instruction
+        Rjmp Loop1                       ;else, loop back and check TOV1 flag
+        sbi TIFR1, TOV1         ;Clear TOV1 bit by writing a 1 to it
+        ldi r30, 0xFF           ;0b11111111
+        sts TCCR1B, r30         ;Stop timer1
+        Ret
 
 ; 50hz
-; (15625 * 0.02) / 250
 Start2:
         sbi PORTB, PB5
         call Delay2
@@ -128,22 +133,23 @@ Start2:
         rjmp selection
 
 Delay2:
-        ldi counter,0
-        out TCNT0,counter
-        ldi repeat,0;
-loop2:
-        in counter,TCNT0
-        cpi counter,250
-        brne loop2
-        ldi counter,0
-        out TCNT0,counter
-        inc repeat
-        cpi repeat,2
-        brne loop2
-        ret
+        ldi r30, High(Value2)
+        sts TCNT1H, r30
+        ldi r30, Low(Value2)
+        sts TCNT1L, r30         ;Setup Timer Counter TCNT1 = Value
+        ldi r31, 0x00           ;0b00000000 - normal mode
+        sts TCCR1A, r31
+        ldi r31, 0x05           ;0b00000101, prescaler = 1024
+        sts TCCR1B, r31         ;Timer will start counting after this
+                                                        ;instruction is executed.
+Loop2:   Sbis TIFR1, TOV1        ;If TOV1=1, skip next instruction
+        Rjmp Loop2                       ;else, loop back and check TOV1 flag
+        sbi TIFR1, TOV1         ;Clear TOV1 bit by writing a 1 to it
+        ldi r30, 0xFF           ;0b11111111
+        sts TCCR1B, r30         ;Stop timer1
+        Ret
 
 ; 10khz
-; (15625 * 0.0001) / 250
 Start3:
         sbi PORTB, PB5
         call Delay3
@@ -152,16 +158,18 @@ Start3:
         rjmp selection
 
 Delay3:
-        ldi counter,0
-        out TCNT0,counter
-        ldi repeat,0;
-loop3:
-        in counter,TCNT0
-        cpi counter,250
-        brne loop3
-        ldi counter,0
-        out TCNT0,counter
-        inc repeat
-        cpi repeat,1
-        brne loop3
-        ret
+        ldi r30, High(Value3)
+        sts TCNT1H, r30
+        ldi r30, Low(Value3)
+        sts TCNT1L, r30         ;Setup Timer Counter TCNT1 = Value
+        ldi r31, 0x00           ;0b00000000 - normal mode
+        sts TCCR1A, r31
+        ldi r31, 0x04           ;0b00000101, prescaler = 256
+        sts TCCR1B, r31         ;Timer will start counting after this
+                                                        ;instruction is executed.
+Loop3:   Sbis TIFR1, TOV1        ;If TOV1=1, skip next instruction
+        Rjmp Loop3                       ;else, loop back and check TOV1 flag
+        sbi TIFR1, TOV1         ;Clear TOV1 bit by writing a 1 to it
+        ldi r30, 0xFF           ;0b11111111
+        sts TCCR1B, r30         ;Stop timer1
+        Ret
