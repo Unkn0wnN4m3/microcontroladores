@@ -75,6 +75,7 @@ selection:
 ; 16*10^6 / (2 * 1024 * 1) = 7812.5
 ; 65536 - 7812 = 57724
 ; Value = 57724 = 0xE17B
+; esta parte de la ecuacion aue controla las frecuencias la realice yo, Javier Rodríguez Meneses
 Start:
         sbi PORTB, PB5
         call Delay
