@@ -121,12 +121,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="adc_graph.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="adc_graph.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="i2c.c">
       <SubType>compile</SubType>
     </Compile>
