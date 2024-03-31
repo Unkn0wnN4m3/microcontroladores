@@ -1,18 +1,18 @@
-/*
- * actividad3.c
- *
- * Created: 25/03/2024 14:46:12
- * Author : huawe
- */ 
-
 #include <avr/io.h>
+#include <util/delay.h>
+#include "adc_graph.h"
 
+int main(void) {
+	// Simulando valores de ADC y canal ADC
+	uint16_t adc_value = 512; // Valor del ADC
+	uint8_t adc_channel = 3; // Canal del ADC
 
-int main(void)
-{
-    /* Replace with your application code */
-    while (1) 
-    {
-    }
+	// Mostrar gráfica y texto en la pantalla OLED
+	show_adc_graph(adc_value, adc_channel);
+
+	while (1) {
+		// Tu código principal aquí
+	}
+
+	return 0;
 }
-
