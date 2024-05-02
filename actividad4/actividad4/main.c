@@ -10,6 +10,7 @@
 #include "I2C.h"
 #include "ssd1306.h"
 #include "adc.h"
+#include "usart.h"
 
 
 int main(void)
@@ -19,6 +20,7 @@ int main(void)
 	InitializeDisplay();
 	reset_display();
 	init_adc_withINT();
+	init_usart(207);
 	sei();
     /* Replace with your application code */
     while (1) 
