@@ -29,7 +29,7 @@ ISR (ADC_vect)
 	uint8_t LowPart = ADCL;	//10-bit resolution
 	uint16_t TenBitResult = ADCH << 2 | LowPart >> 6;
 		
-	//Example:reading sensor output on LCD
+	//Example:reading sensor output on oled
 	char ascii_temp [10];
 	float temp = (TenBitResult*150/307);
 	//Celsius degree conversion

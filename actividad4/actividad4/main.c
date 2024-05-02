@@ -6,10 +6,20 @@
  */ 
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
+#include "I2C.h"
+#include "ssd1306.h"
+#include "adc.h"
 
 
 int main(void)
 {
+	
+	init_i2c();
+	InitializeDisplay();
+	reset_display();
+	init_adc_withINT();
+	sei();
     /* Replace with your application code */
     while (1) 
     {
