@@ -6,13 +6,13 @@
 
 void init_adc_withoutINT(void)
 {
-	ADMUX=(1<<REFS0);	//selects Vref 
-						//(AVCC with external capacitor at AREF pin)
-						//Entrada AVcc= 5v y Aref= con un capacitor a GND
-						//Internamente: Vref=0-5v
+	ADMUX=(1<<REFS0);	//selects Vref
+	//(AVCC with external capacitor at AREF pin)
+	//Entrada AVcc= 5v y Aref= con un capacitor a GND
+	//Internamente: Vref=0-5v
 	ADCSRA = (1<<ADEN);//enable ADC
 	ADCSRA = (1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);	//Prescaler div factor =128
-												//fo=1,000,000/128 ~ 7Khz
+	//fo=1,000,000/128 ~ 7Khz
 }
 
 uint16_t read_adc(void)
@@ -28,7 +28,7 @@ ISR (ADC_vect)
 {
 	uint8_t LowPart = ADCL;	//10-bit resolution
 	uint16_t TenBitResult = ADCH << 2 | LowPart >> 6;
-		
+	
 	//Example:reading sensor output on oled
 	char ascii_temp [10];
 	float temp = (TenBitResult*150/307);
@@ -39,14 +39,14 @@ ISR (ADC_vect)
 	// x=((1.5v)*(1023))/5v=306.9
 	dtostrf(temp, 4, 1, ascii_temp);
 	//4 integers, 1 decimals
-	init_i2c();
-	InitializeDisplay();
-	clear_display();
 	
-	setXY(5,2);
+	// show temperature
+	setXY(0,0);
+	sendStr("Temperature:");
+	setXY(1,0);
 	sendStr(ascii_temp);
-	//SendChar(0xDF); //degrees character
-	sendStr(" C");
+	sendStr(" C ");
+	
 	//start another conversion
 	ADCSRA |= 1<<ADSC;
 }
