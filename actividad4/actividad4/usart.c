@@ -2,6 +2,8 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "usart.h"
+#include "I2C.h"
+#include "ssd1306.h"
 
 //global variables
 volatile char usart_received_char;
@@ -9,42 +11,51 @@ volatile char usart_received_char;
 ISR (USART_RX_vect)
 {
 	usart_received_char=UDR0;
+	usart_transmit(usart_received_char);
 
+	setXY(3,0);
+	sendStr("LED status: ");
 	
-	if (usart_received_char == 00) {
-		PORTD |= (1 << PIND4);
+	if (usart_received_char == '1')
+	{
+		
+		PORTB = 0x01;
+		setXY(4, 0);
+		sendStr("[ON] Red");
 	}
-	
-	else {
-		PORTD |= (1 << PIND4) | (1 << PIND5) | (1 << PIND6);
+	else
+	{
+		PORTB = 0x02;
+		setXY(4, 0);
+		sendStr("[ON] Green");
 	}
 }
 
 unsigned char usart_receive( void )
 {
-  while (!(UCSR0A & (1 << RXC0))); // wait for data (RXC=1)
-  return UDR0;
+	while (!(UCSR0A & (1 << RXC0))); // wait for data (RXC=1)
+	return UDR0;
 }
 
 void usart_transmit( unsigned char data )
 {
-  while (!(UCSR0A & (1 << UDRE0)));  // wait for transmitter buffer empty(UDRE=1)
-  UDR0 = data; // when buffer empty, write data to UDR
+	while (!(UCSR0A & (1 << UDRE0)));  // wait for transmitter buffer empty(UDRE=1)
+	UDR0 = data; // when buffer empty, write data to UDR
 }
 
 void usart_transmit_string( char s[] )
-{	
+{
 	int i = 0;
-  while (i < 64)
-  {
-	  if (s[i] == '\0') break;
-	  usart_transmit(s[i++]);
-  }
+	while (i < 64)
+	{
+		if (s[i] == '\0') break;
+		usart_transmit(s[i++]);
+	}
 }
 
 void init_usart(unsigned int baudrate)
 {
-	UCSR0C &= (~(1<<UMSEL00) & ~(1<<UMSEL01)); // bit UMSEL = 0 asyncronous mode	
+	UCSR0C &= (~(1<<UMSEL00) & ~(1<<UMSEL01)); // bit UMSEL = 0 asyncronous mode
 	UCSR0A = (1<<U2X0); // bit U2X = 1 double speed
 	//Baudrate:fosc=16Mhz,U2Xn=1,BaudRate=9600, then UBRR= 207 (DS pag.199)
 	UBRR0H = (unsigned char) (baudrate>>8); // write(MSB)
