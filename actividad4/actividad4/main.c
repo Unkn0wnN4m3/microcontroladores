@@ -1,9 +1,9 @@
 /*
- * actividad4.c
- *
- * Created: 30/04/2024 13:13:01
- * Author : huawe
- */ 
+* actividad4.c
+*
+* Created: 30/04/2024 13:13:01
+* Author : huawe
+*/
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -16,15 +16,17 @@
 int main(void)
 {
 	
+	DDRB = 0x07;
+
 	init_i2c();
 	InitializeDisplay();
 	reset_display();
 	init_adc_withINT();
 	init_usart(207);
 	sei();
-    /* Replace with your application code */
-    while (1) 
-    {
-    }
+
+	while (1)
+	{
+	}
 }
 

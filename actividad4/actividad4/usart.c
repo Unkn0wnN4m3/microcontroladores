@@ -10,7 +10,6 @@ ISR (USART_RX_vect)
 {
 	usart_received_char=UDR0;
 
-	DDRD = 0xF0;
 	
 	if (usart_received_char == 00) {
 		PORTD |= (1 << PIND4);
