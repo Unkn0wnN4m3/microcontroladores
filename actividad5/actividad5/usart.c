@@ -2,8 +2,6 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "usart.h"
-#include "I2C.h"
-#include "ssd1306.h"
 
 //global variables
 volatile char usart_received_char;
@@ -12,40 +10,6 @@ ISR (USART_RX_vect)
 {
 	usart_received_char=UDR0;
 	usart_transmit(usart_received_char);
-	
-	switch (usart_received_char)
-	{
-		case '1':
-		PORTB = 0x01;
-		setXY(5, 0);
-		sendStr("[ON] Blue   ");
-		break;
-		
-		case '2':
-		PORTB = 0x02;
-		setXY(5, 0);
-		sendStr("[ON] Pink   ");
-		break;
-		
-		case '3':
-		PORTB = 0x04;
-		setXY(5, 0);
-		sendStr("[ON] Green   ");
-		break;
-		
-		case '0':
-		PORTB = 0x00;
-		setXY(5, 0);
-		sendStr("[OFF] All   ");
-		break;
-
-		//default:
-		//PORTB = 0x07;
-		//setXY(5, 0);
-		//sendStr("[ON] Red");
-
-	}
-	
 }
 
 unsigned char usart_receive( void )
@@ -72,10 +36,6 @@ void usart_transmit_string( char s[] )
 
 void init_usart(unsigned int baudrate)
 {
-	
-	setXY(4,0);
-	sendStr("LED status: ");
-	
 	UCSR0C &= (~(1<<UMSEL00) & ~(1<<UMSEL01)); // bit UMSEL = 0 asyncronous mode
 	UCSR0A = (1<<U2X0); // bit U2X = 1 double speed
 	//Baudrate:fosc=16Mhz,U2Xn=1,BaudRate=9600, then UBRR= 207 (DS pag.199)
