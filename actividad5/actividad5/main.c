@@ -16,17 +16,23 @@ int main(void)
 	setXY(0,0);
 	sendStr("LED status:");
 	
-	while(1) {
-		int i = 0;
-
-		while (i < 64) {
-			char received_char = usart_receive();
-			if (received_char == '\0') break;
-			
-			setXY(1, i);
-			SendChar(received_char[i]);
-			i++;
-		}
+	//usart_received_char=UDR0;
+	
+	// si usart_receive() contirne un char, entonces necesitamos obtener ese caracter
+	// del return, guardarlo en una variable temporal, en este caso en la variable global.
+	// Para formar una string debemos guardar cada caracter en un array
+	
+	
+	//char oled_text[64];
+	//char received_char = ' ';
+	//int i = 0;
+	
+	while(1)
+	{
+		//if (received_char != '\0') {
+			//received_char = usart_receive();
+			//oled_text[i++] = received_char;
+		//}
 	}
 }
 

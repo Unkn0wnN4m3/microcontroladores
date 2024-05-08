@@ -2,13 +2,24 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "usart.h"
+#include "ssd1306.h"
+#include "I2C.h"
 
 //global variables
 volatile char usart_received_char;
 
 ISR (USART_RX_vect)
 {
-	usart_received_char=UDR0;
+	usart_received_char = usart_receive();	
+	
+	// por lo visto en el echo de la terminal, la funcion usart receive, devuel todo un string.
+	// entonces se deveria poder imprimir directamente a la pantalla antes de hacer el "echo"
+	// en el serial, no?
+	
+	//char* text = &usart_received_char;
+	// recibe un puntero... entonces tenemos que hacer de "test" -> ["t", "e", "s", "t"]
+	sendStrXY(usart_received_char, 1, 0);
+	
 	usart_transmit(usart_received_char);
 }
 
