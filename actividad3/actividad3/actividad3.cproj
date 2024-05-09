@@ -121,6 +121,15 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="adc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="data.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="i2c.c">
       <SubType>compile</SubType>
     </Compile>
@@ -130,10 +139,10 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="oled_i2c.c">
+    <Compile Include="ssd1306.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="oled_i2c.h">
+    <Compile Include="ssd1306.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
